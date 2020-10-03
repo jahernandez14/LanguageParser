@@ -17,7 +17,7 @@ include "evalSectionException.php";
         . "    <title>CS 4339/5339 PHP assignment</title>" . Fall20phpProg::$EOL
         . "  </head>" . Fall20phpProg::$EOL
         . "  <body>" . Fall20phpProg::$EOL
-        . "    <pre>\n";
+        . "    <pre>" . Fall20phpProg::$EOL;
 
             $footer = "    </pre>" . Fall20phpProg::$EOL
         . "  </body>" . Fall20phpProg::$EOL
@@ -38,8 +38,8 @@ include "evalSectionException.php";
                 echo "section " . ++$section;
                 try {
                     Fall20phpProg::evalSection();
-                    echo "Section Result:\n";
-                    echo Fall20phpProg::$result . "\n";
+                    echo "Section Result:" . Fall20phpProg::$EOL;
+                    echo Fall20phpProg::$result . "" . Fall20phpProg::$EOL;
                 } catch (EvalSectionException $ex) {
                     while (Fall20phpProg::$currentToken->type != "RSQUAREBRACKET" && Fall20phpProg::$currentToken->type != "EOF") {
                         Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
@@ -47,7 +47,7 @@ include "evalSectionException.php";
                     Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
                 }
             }
-            echo $footer . "\n";
+            echo $footer . "" . Fall20phpProg::$EOL;
         }
 
         public static function evalSection(){
@@ -55,12 +55,12 @@ include "evalSectionException.php";
             if (Fall20phpProg::$currentToken->type != "LSQUAREBRACKET"){
                 throw new EvalSectionException("A section must start with \"[\"");
             }
-            echo "\n[\n";
+            echo Fall20phpProg::$EOL . "[" . Fall20phpProg::$EOL;
             Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
             while (Fall20phpProg::$currentToken->type != "RSQUAREBRACKET" && Fall20phpProg::$currentToken->type != Fall20phpProg::$EOL){
                 Fall20phpProg::evalStatement(Fall20phpProg::$oneIndent, true);
             }
-            echo "]\n";
+            echo "]" . Fall20phpProg::$EOL;
             Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
         }
 
@@ -90,7 +90,7 @@ include "evalSectionException.php";
             Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
             if(Fall20phpProg::$currentToken->type == "INT"){
                 $value = Fall20phpProg::$currentToken->value;
-                echo $value . "\n";
+                echo $value . "" . Fall20phpProg::$EOL;
                 Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
                 if ($exec){
                     Fall20phpProg::$map[$key]= $value;
@@ -98,7 +98,7 @@ include "evalSectionException.php";
             }
             else if (Fall20phpProg::$currentToken->type == "ID"){
                 $key2 = Fall20phpProg::$currentToken->value;
-                echo $key2 . "\n";
+                echo $key2 . "" . Fall20phpProg::$EOL;
                 Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
                 if($exec){
                     if (!array_key_exists($key2, Fall20phpProg::$map)){
@@ -120,19 +120,19 @@ include "evalSectionException.php";
                     if ($exec){
                         Fall20phpProg::$result .= Fall20phpProg::$currentToken->value . Fall20phpProg::$EOL;
                     }
-                    echo "\"" . str_replace("\"","\\\"",Fall20phpProg::$currentToken->value) . "\"\n";
+                    echo "\"" . str_replace("\"","\\\"",Fall20phpProg::$currentToken->value) . "\"" . Fall20phpProg::$EOL;
                     Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
                     break;
                 case "INT":
                     if ($exec){
                         Fall20phpProg::$result .= Fall20phpProg::$currentToken->value . Fall20phpProg::$EOL;
                     }
-                    echo Fall20phpProg::$currentToken->value . "\n";
+                    echo Fall20phpProg::$currentToken->value . "" . Fall20phpProg::$EOL;
                     Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
                     break;
                 case "ID":
                     $key = Fall20phpProg::$currentToken->value;
-                    echo $key . "\n";
+                    echo $key . "" . Fall20phpProg::$EOL;
                     if($exec){
                         if(!array_key_exists($key, Fall20phpProg::$map)){
                             throw new EvalSectionException("undefined variable");
@@ -164,7 +164,7 @@ include "evalSectionException.php";
             if(Fall20phpProg::$currentToken->type != "LBRACKET"){
                 throw new EvalSectionException("Left bracket expected");
             }
-            echo " {\n";
+            echo " {" . Fall20phpProg::$EOL;
             Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
             while(Fall20phpProg::$currentToken->type == "CASE"){
                 Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
@@ -177,14 +177,14 @@ include "evalSectionException.php";
                 if(Fall20phpProg::$currentToken != "COLON"){
                     throw new EvalSectionException("colon expected");
                 }
-                echo ":\n";
+                echo ":" . Fall20phpProg::$EOL;
                 Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
                 while(Fall20phpProg::$currentToken->type != "RBRACKET"){
                     Fall20phpProg::evalStatement($indent . Fall20phpProg::$oneIndent . Fall20phpProg::$oneIndent, $exec);
                 }
             }
             if (Fall20phpProg::$currentToken->type == "RBRACKET"){
-                echo $indent . "}\n";
+                echo $indent . "}" . Fall20phpProg::$EOL;
                 Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
             }
             else {
@@ -201,12 +201,12 @@ include "evalSectionException.php";
             if (Fall20phpProg::$currentToken->type != "COLON"){
                 throw new EvalSectionException("colon expected");
             }
-            echo ":\n";
+            echo ":" . Fall20phpProg::$EOL;
             Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
             while (Fall20phpProg::$currentToken->type != "BREAK"){
                 Fall20phpProg::evalStatement($indent, $exec && $value == $target);
             }
-            echo $indent . "break\n";
+            echo $indent . "break" . Fall20phpProg::$EOL;
             Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
             return $exec && !($value == $target);
         }
