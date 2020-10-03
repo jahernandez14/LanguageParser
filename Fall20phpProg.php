@@ -120,7 +120,7 @@ include "evalSectionException.php";
                     if ($exec){
                         Fall20phpProg::$result .= Fall20phpProg::$currentToken->value . Fall20phpProg::$EOL;
                     }
-                    echo "\"" . str_replace("\"","\\\"",Fall20phpProg::$currentToken->value) . "\"";
+                    echo "\"" . str_replace("\"","\\\"",Fall20phpProg::$currentToken->value) . "\"\n";
                     Fall20phpProg::$currentToken = Fall20phpProg::$t->nextToken();
                     break;
                 case "INT":
